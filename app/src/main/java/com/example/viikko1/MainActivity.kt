@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.viikko1.ui.HomeScreen
+import com.example.viikko1.view.HomeScreen
 import com.example.viikko1.ui.theme.Viikko1Theme
 
 class MainActivity : ComponentActivity() {

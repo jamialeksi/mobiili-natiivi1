@@ -1,48 +1,35 @@
 package com.example.viikko1.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.viikko1.domain.Task
-import com.example.viikko1.domain.mockTasks
+import com.example.viikko1.model.Task
+import com.example.viikko1.model.mockTasks
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class TaskViewModel : ViewModel() {
 
-    var tasks by mutableStateOf(listOf<Task>())
-        private set
+    private val _tasks = MutableStateFlow(mockTasks)
+    val tasks: StateFlow<List<Task>> = _tasks.asStateFlow()
 
-    private var allTasks: List<Task> = emptyList()
-
-    init {
-        allTasks = mockTasks
-        tasks = allTasks
-    }
-
-    fun showAll() {
-        tasks = allTasks
-    }
-
-    fun filterByDone(done: Boolean) {
-        tasks = allTasks.filter { it.done == done }
-    }
-
-    fun sortByDueDate() {
-        tasks = tasks.sortedBy { it.dueDate }
-    }
-
-    fun addTask(task: Task) {
-        allTasks = allTasks + task
-        tasks = allTasks
+    fun addTask(title: String, description: String) {
+        val newId = (_tasks.value.maxOfOrNull { it.id } ?: 0) + 1
+        _tasks.value = _tasks.value + Task(newId, title, description, false)
     }
 
     fun toggleDone(id: Int) {
-        allTasks = allTasks.map { if (it.id == id) it.copy(done = !it.done) else it }
-        tasks = allTasks
+        _tasks.value = _tasks.value.map { t ->
+            if (t.id == id) t.copy(done = !t.done) else t
+        }
     }
 
     fun removeTask(id: Int) {
-        allTasks = allTasks.filter { it.id != id }
-        tasks = allTasks
+        _tasks.value = _tasks.value.filter { it.id != id }
+    }
+
+    fun updateTask(updated: Task) {
+        _tasks.value = _tasks.value.map { t ->
+            if (t.id == updated.id) updated else t
+        }
     }
 }
