@@ -7,3 +7,6 @@ Sovelluksen voi ajaa Android Studiossa emulaattorilla tai vaihtoehtoisesti voit 
 
 Viikon 2 lisäys
 Compose on tilanhallintaa jossa ui päivittyy automaattisesti tilan muuttuessa. Tässä toteutuksessa tehtävälistaa hallitaan viewmodelissa mutableStateOf muuttujalla, jolloin ui reagoi muutoksiin ilman erillisiä kutsuja. Remember sopii paremmin pieniin hetkellisiin muutoksiin, kun taas viewmodel säilyttää datan vaikka sivu muuttuisi.
+
+Viikon 3 lisäys
+MVVM arkkitehtuuri on 3 osainen,  View, Viewmodel ja model. View on ui ja käyttäjän vuorovaikutus. Viewmodel hallitsee ui logiikkaa ja tilan hallintaa ja model hallitsee datan. Tämä tekee koodin rakenteesta selkeää ja helposti ylläpidettävää. StateFlown avulla saadaan sovelluksesta reaktiivisempi, koska se tarkistaa koko ajan käyttöliittymän tilaa ja päivittyy automaattiesti aina kun data muuttuu. Tällöin ei tarvita erillisiä päivitys kutsuja ja se tekee tästä tehokkaan.
