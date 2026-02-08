@@ -28,7 +28,6 @@ class MainActivity : ComponentActivity() {
             Viikko1Theme {
                 val navController = rememberNavController()
 
-                // TÄRKEIN: ViewModel luodaan TÄÄLLÄ, ei screenissä -> sama tila kaikille
                 val vm: TaskViewModel = viewModel()
 
                 NavHost(
