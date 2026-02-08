@@ -12,60 +12,48 @@ import com.example.viikko1.model.Task
 import com.example.viikko1.viewmodel.TaskViewModel
 
 @Composable
-fun HomeScreen(
+fun CalendarScreen(
     vm: TaskViewModel,
-    onGoCalendar: () -> Unit,
+    onGoHome: () -> Unit,
     onGoSettings: () -> Unit
 ) {
     val tasks by vm.tasks.collectAsState()
-
-    var showAdd by remember { mutableStateOf(false) }
     var selected by remember { mutableStateOf<Task?>(null) }
+
+    val grouped = remember(tasks) { tasks.groupBy { it.dueDate } }
 
     Column(Modifier.padding(16.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Button(onClick = onGoCalendar) { Text("Calendar") }
+            Button(onClick = onGoHome) { Text("List") }
             Button(onClick = onGoSettings) { Text("Settings") }
         }
 
         Spacer(Modifier.height(12.dp))
 
-        Button(onClick = { showAdd = true }, modifier = Modifier.fillMaxWidth()) {
-            Text("Add")
-        }
-
-        Spacer(Modifier.height(12.dp))
-
         LazyColumn {
-            items(tasks) { task ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp)
-                        .clickable { selected = task }
-                ) {
-                    Column(Modifier.weight(1f)) {
-                        Text(task.title, style = MaterialTheme.typography.titleMedium)
-                        Text(task.description, style = MaterialTheme.typography.bodySmall)
-                        Text(task.dueDate, style = MaterialTheme.typography.bodySmall)
+            grouped.keys.sorted().forEach { date ->
+                item {
+                    Text(date, style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 8.dp))
+                }
+                items(grouped[date] ?: emptyList()) { task ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .clickable { selected = task }
+                    ) {
+                        Column(Modifier.weight(1f)) {
+                            Text(task.title)
+                            Text(task.description, style = MaterialTheme.typography.bodySmall)
+                        }
+                        Checkbox(
+                            checked = task.done,
+                            onCheckedChange = { vm.toggleDone(task.id) }
+                        )
                     }
-                    Checkbox(
-                        checked = task.done,
-                        onCheckedChange = { vm.toggleDone(task.id) }
-                    )
                 }
             }
         }
-    }
-
-    if (showAdd) {
-        AddTaskDialog(
-            onCancel = { showAdd = false },
-            onSave = { title, desc, dueDate ->
-                vm.addTask(title, desc, dueDate)
-                showAdd = false
-            }
-        )
     }
 
     selected?.let { task ->
