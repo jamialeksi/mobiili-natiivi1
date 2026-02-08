@@ -11,7 +11,7 @@ fun SettingsScreen(
     onGoHome: () -> Unit,
     onGoCalendar: () -> Unit
 ) {
-    var dark by remember { mutableStateOf(false) } // dummy, ei pakko tallentaa
+    var dark by remember { mutableStateOf(false) }
 
     Column(Modifier.padding(16.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
