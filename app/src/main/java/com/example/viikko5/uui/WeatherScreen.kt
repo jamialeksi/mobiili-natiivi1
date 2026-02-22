@@ -12,6 +12,7 @@ import com.example.viikko5.viewmodel.WeatherViewModel
 fun WeatherScreen(vm: WeatherViewModel = viewModel()) {
 
     val state by vm.uiState.collectAsState()
+    val weather by vm.weather.collectAsState()
 
     Column(modifier = Modifier.padding(16.dp)) {
 
@@ -46,8 +47,12 @@ fun WeatherScreen(vm: WeatherViewModel = viewModel()) {
                 Text(state.error!!)
             }
 
-            state.weather != null -> {
-                WeatherResultSection(state.weather!!)
+            weather != null -> {
+                WeatherResultSection(
+                    city = weather!!.city,
+                    temp = weather!!.temp,
+                    description = weather!!.description
+                )
             }
         }
     }
